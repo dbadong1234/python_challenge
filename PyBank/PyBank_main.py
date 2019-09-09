@@ -1,28 +1,27 @@
-#import modules 
-
+#import library/module
 import os
 import csv
 
-total = 0
 
-#open budget_csv file 
-#r+ opens file for both reading and writing
+#Code for TOTAL_MONTHS
 budget_data = open("budget_data.csv","r+")
 reader_budget_data = csv.reader(budget_data)
-#count length of dates (-1 removes title of date column)
 total_months = len(list(reader_budget_data))-1
-# check calculation use print(total_months)
+# NOTES: open budget_csv file: r+ opens file for both reading and writing
+# NOTES: count length of dates; -1 removes title of date column
+#Code for NET_PROFIT_LOSS
+total = 0 
+c1 = []
+for row in reader_budget_data: 
+    c1.append(row[1])
+    total = total + int(row[1])
 
-def profits_losses(budget_data):
-    int(budget_data)
-total_profits_losses = sum(budget_data[1])
-print (total_profits_losses)
-
-
-#Final Answers
+#FINAL OUTPUT 
 print('Financial Analysis')
+print('---------------------------------')
 print('Total Months: %d' %total_months)
-print('Total Profits/Losses: %d' %total_profits_losses)
-print('Average Change: %d' %average_change)
-print('Greatest Increase in Profits: %d' %percent_increase)
-print('Greatest Decrease in Profits: %d' %percent_decrease)
+print(total)
+
+
+print('changes')
+#changes 
