@@ -1,27 +1,86 @@
-#import library/module
+#import modules
 import os
 import csv
 
+#define csv file outputs as list 
+date, revenue = ([] for i in range(2))
 
-#Code for TOTAL_MONTHS
-budget_data = open("budget_data.csv","r+")
-reader_budget_data = csv.reader(budget_data)
-total_months = len(list(reader_budget_data))-1
-# NOTES: open budget_csv file: r+ opens file for both reading and writing
-# NOTES: count length of dates; -1 removes title of date column
-#Code for NET_PROFIT_LOSS
-total = 0 
-c1 = []
-for row in reader_budget_data: 
-    c1.append(row[1])
-    total = total + int(row[1])
+# input and output files
+input_file = "budget_data.csv"
+output_file = "financial_analysis.txt"
 
-#FINAL OUTPUT 
-print('Financial Analysis')
-print('---------------------------------')
-print('Total Months: %d' %total_months)
-print(total)
+# input and output paths
+csvpath = os.path.join('..', 'PyBank', 'budget_data.csv')
+txtpath = os.path.join('..', 'PyBank', 'financial_analysis.txt')
 
 
-print('changes')
-#changes 
+with open(csvpath, 'r+', newline='') as budget_data:
+    #r+ opens csv with read/write permissions 
+    reader = csv.reader(budget_data, delimiter=',')
+
+    next(reader)
+    #accounts for header/column titles 
+
+    row_num = 0
+    for row in reader:
+        date.append(row[0])
+        revenue.append(row[1])
+        row_num += 1
+
+print("\nFinancial Analysis", "\n" + "-----------------------------------------------")
+
+#Total Months
+print("Total Months:", row_num)
+
+
+#Total Revenue
+revenue_sum = 0
+for i in revenue:
+    revenue_sum += int(i)
+
+print("Total Revenue: $" + str(revenue_sum))
+
+total_revenue_change = 0
+for h in range(row_num):
+    total_revenue_change += int(revenue[h]) - int(revenue[h - 1])
+
+# the first_pass variable is created to remove the first iteration revenue change
+# which, takes the first list element and subtracts it by the last list element.
+first_pass = (int(revenue[0]) - int(revenue[-1]))
+total_revenue_change_adj = total_revenue_change - first_pass
+
+avg_revenue_change = (total_revenue_change_adj + int(revenue[0])) / row_num
+print("Average Revenue Change: $" + str(round(avg_revenue_change)))
+
+
+# Greatest Revenue Increase
+high_revenue = 0
+for j in range(len(revenue)):
+    if int(revenue[j]) - int(revenue[j - 1]) > high_revenue:
+        high_revenue = int(revenue[j]) - int(revenue[j - 1])
+        high_month = date[j]
+
+print("Greatest Increase in Revenue:", high_month, "($" + str(high_revenue) + ")")
+
+
+# Greatest Revenue Decrease
+low_revenue = 0
+for k in range(len(revenue)):
+    if int(revenue[k]) - int(revenue[k - 1]) < low_revenue:
+        low_revenue = int(revenue[k]) - int(revenue[k - 1])
+        low_month = date[k]
+
+print("Greatest Decrease in Revenue:", low_month, "($" + str(low_revenue) + ")")
+
+with open(txtpath, 'w', newline='') as financial_analysis_txt:
+    writer = csv.writer(financial_analysis_txt)
+
+    writer.writerows([
+        ["Financial Analysis for: " + input_file],
+        ["-------------------------------------"],
+        ["Total Months: " + str(row_num)],
+        ["Total Revenue: $" + str(revenue_sum)],
+        ["Average Revenue Change: $" + str(round(avg_revenue_change))],
+        ["Greatest Increase in Revenue: " + str(high_month) + " ($" + str(high_revenue) + ")"],
+        ["Greatest Decrease in Revenue: " + str(low_month) + " ($" + str(low_revenue) + ")"]
+    ])
