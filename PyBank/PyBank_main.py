@@ -27,7 +27,7 @@ with open(csvpath, 'r+', newline='') as budget_data:
         revenue.append(row[1])
         row_num += 1
 
-print("\nFinancial Analysis", "\n" + "-----------------------------------------------")
+print("\nFinancial Analysis", "\n" + "-"*50)
 
 #Total Months
 print("Total Months:", row_num)
@@ -77,7 +77,7 @@ with open(txtpath, 'w', newline='') as financial_analysis_txt:
 
     writer.writerows([
         ["Financial Analysis for: " + input_file],
-        ["-------------------------------------"],
+        ["-"*25],
         ["Total Months: " + str(row_num)],
         ["Total Revenue: $" + str(revenue_sum)],
         ["Average Revenue Change: $" + str(round(avg_revenue_change))],

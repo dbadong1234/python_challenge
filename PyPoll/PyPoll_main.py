@@ -4,31 +4,31 @@ import csv
 
 input_file = 'election_data.csv'
 csvpath = os.path.join('..', 'PyPoll', 'election_data.csv')
-
 output_file = 'election_results.txt'
 txtpath = os.path.join('..', 'PyPoll', 'election_results.txt')
 
 candidates, total_candidates, candidate_perc, candidate_total, summaries = ([] for i in range(5))
 
+
 with open(csvpath, 'r+', newline='') as election_data:
     reader = csv.reader(election_data, delimiter=',')
     next(reader)
-    num_rows = 0
+    number_rows = 0
 
     for row in reader:
         total_candidates.append(row[2])
-        num_rows += 1
+        number_rows += 1
 
 sorted_candidates = sorted(total_candidates)
 
-for i in range(num_rows):
+for i in range(number_rows):
     if sorted_candidates[i - 1] != sorted_candidates[i]:
         candidates.append(sorted_candidates[i])
 
 print("\nElection Results")
-print("---------------------------------------------------")
-print("Total Votes:", num_rows)
-print("---------------------------------------------------")
+print("-"*50)
+print("Total Votes:", number_rows)
+print("-"*50)
 
 
 for j in range(len(candidates)):
@@ -38,7 +38,7 @@ for j in range(len(candidates)):
         if candidates[j] == sorted_candidates[k]:
             candidate_count += 1
 
-    candidate_perc.append(round(candidate_count / num_rows * 100, 1))
+    candidate_perc.append(round(candidate_count / number_rows * 100, 1))
     candidate_total.append(candidate_count)
 
 
@@ -57,7 +57,7 @@ for k in range(len(candidate_perc)):
 
 print("-" * 40)
 print("Winner:", winner)
-print("---------------------------------------------------")
+print("-"*25)
 print("\n\n")
 
 
@@ -66,13 +66,13 @@ with open(txtpath, 'w', newline='') as election_results:
 
     writer.writerows([
         ["Election Results for: " + input_file],
-        ["---------------------------------------------------"],
-        ["Total Votes: " + str(num_rows)],
+        ["-"*25],
+        ["Total Votes: " + str(number_rows)],
     
     ])
     writer.writerows(summaries)
     writer.writerows([
-        ["---------------------------------------------------"],
+        ["-"*25],
         ["Winner: " + str(winner)],
     ])
 
